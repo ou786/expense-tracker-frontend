@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-function ExpenseForm({ editExpense, setEditExpense }) {
+function ExpenseForm({ editExpense, setEditExpense, setExpenses }) {
+
   const [formData, setFormData] = useState({
     user_id: '',
     amount: '',
@@ -25,13 +26,16 @@ function ExpenseForm({ editExpense, setEditExpense }) {
 
     if (editExpense) {
       // PUT request
-      await axios.put(`http://localhost:4000/expenses/${editExpense.id}`, formData);
+      await axios.put(`https://expense-tracker-backend-e5dw.onrender.com/expenses/${editExpense.id}`, formData);
       alert("Expense updated!");
       setEditExpense(null);
     } else {
       // POST request
-      await axios.post('http://localhost:4000/expenses', formData);
-      alert("Expense added!");
+      await axios.post('https://expense-tracker-backend-e5dw.onrender.com/expenses', formData)
+      .then((res) => {
+    setExpenses(prev => [...prev, res.data]); // 👈 Add new expense to state
+    alert("Expense added!");
+  });
     }
 
     setFormData({

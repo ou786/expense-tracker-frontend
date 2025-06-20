@@ -1,23 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import axios from 'axios';
 
-function ExpenseList({setEditExpense}) {
-  const [expenses, setExpenses] = useState([]);
-
-  const fetchExpenses = () => {
-    axios.get('http://localhost:4000/expenses')
-      .then((res) => setExpenses(res.data))
-      .catch((err) => console.error('Error fetching expenses:', err));
-  };
+function ExpenseList({ expenses, setExpenses, setEditExpense }) {
 
   useEffect(() => {
-    fetchExpenses();
-  }, []);
+  axios.get('https://expense-tracker-backend-e5dw.onrender.com/expenses')
+    .then((res) => setExpenses(res.data))
+    .catch((err) => console.error('Error fetching expenses:', err));
+}, []);
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:4000/expenses/${id}`);
-      fetchExpenses(); // Refresh list after deletion
+      await axios.delete(`https://expense-tracker-backend-e5dw.onrender.com/expenses/${id}`);
+      setExpenses(prev => prev.filter(exp => exp.id !== id)); // ✅ instantly update list
     } catch (err) {
       console.error('Error deleting expense:', err);
     }

@@ -5,13 +5,22 @@ import ExpenseList from './components/ExpenseList';
 import Analytics from './components/Analytics'; // 👈 import this
 
 function App() {
-  const [editExpense, setEditExpense] = useState(null);
+  const [editExpense, setEditExpense] = useState();
+
+  const [expenses, setExpenses] = useState([]);
 
   return (
     <div className="container">
       <h1>Expense Tracker</h1>
-      <ExpenseForm editExpense={editExpense} setEditExpense={setEditExpense} />
-      <ExpenseList setEditExpense={setEditExpense} />
+      <ExpenseForm editExpense={editExpense} setEditExpense={setEditExpense} setExpenses={setExpenses} />
+
+
+<ExpenseList
+  expenses={expenses}
+  setExpenses={setExpenses}
+  setEditExpense={setEditExpense}
+/>
+
       <Analytics /> {/* 👈 Add this here */}
     </div>
   );
