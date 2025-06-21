@@ -4,15 +4,23 @@ import axios from 'axios';
 function ExpenseList({ expenses, setExpenses, setEditExpense }) {
 
   useEffect(() => {
-  axios.get('https://expense-tracker-backend-e5dw.onrender.com/expenses')
+  axios.get('https://expense-tracker-backend-e5dw.onrender.com/expenses',{
+    headers: {
+    Authorization: `Bearer ${localStorage.getItem('token')}`
+  }
+  })
     .then((res) => setExpenses(res.data))
     .catch((err) => console.error('Error fetching expenses:', err));
 }, []);
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`https://expense-tracker-backend-e5dw.onrender.com/expenses/${id}`);
-      setExpenses(prev => prev.filter(exp => exp.id !== id)); // ✅ instantly update list
+      await axios.delete(`https://expense-tracker-backend-e5dw.onrender.com/expenses/${id}`,{
+        headers: {
+    Authorization: `Bearer ${localStorage.getItem('token')}`
+  }
+      });
+      setExpenses(prev => prev.filter(exp => exp.id !== id)); 
     } catch (err) {
       console.error('Error deleting expense:', err);
     }

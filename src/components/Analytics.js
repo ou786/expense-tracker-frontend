@@ -6,7 +6,11 @@ function Analytics() {
   const [data, setData] = useState({});
 
   useEffect(() => {
-    axios.get('http://localhost:4000/expenses/analytics')
+    axios.get('http://localhost:4000/expenses/analytics',{
+      headers: {
+    Authorization: `Bearer ${localStorage.getItem('token')}`
+  }
+    })
       .then(res => setData(res.data))
       .catch(err => console.error('Error fetching analytics:', err));
   }, []);

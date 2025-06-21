@@ -26,12 +26,20 @@ function ExpenseForm({ editExpense, setEditExpense, setExpenses }) {
 
     if (editExpense) {
       // PUT request
-      await axios.put(`https://expense-tracker-backend-e5dw.onrender.com/expenses/${editExpense.id}`, formData);
+      await axios.put(`https://expense-tracker-backend-e5dw.onrender.com/expenses/${editExpense.id}`, {
+        headers: {
+    Authorization: `Bearer ${localStorage.getItem('token')}`
+  }
+},formData);
       alert("Expense updated!");
       setEditExpense(null);
     } else {
       // POST request
-      await axios.post('https://expense-tracker-backend-e5dw.onrender.com/expenses', formData)
+      await axios.post('https://expense-tracker-backend-e5dw.onrender.com/expenses',{
+        headers: {
+    Authorization: `Bearer ${localStorage.getItem('token')}`
+  }
+      }, formData)
       .then((res) => {
     setExpenses(prev => [...prev, res.data]); // 👈 Add new expense to state
     alert("Expense added!");
