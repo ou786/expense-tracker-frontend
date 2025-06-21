@@ -22,30 +22,36 @@ function ExpenseForm({ editExpense, setEditExpense, setExpenses }) {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
+  const config = {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('token')}`
+    }
+  };
+
+  try {
     if (editExpense) {
       // PUT request
-      await axios.put(`https://expense-tracker-backend-e5dw.onrender.com/expenses/${editExpense.id}`, {
-        headers: {
-    Authorization: `Bearer ${localStorage.getItem('token')}`
-  }
-},formData);
+      await axios.put(
+        `https://expense-tracker-backend-e5dw.onrender.com/expenses/${editExpense.id}`,
+        formData,
+        config
+      );
       alert("Expense updated!");
       setEditExpense(null);
     } else {
       // POST request
-      await axios.post('https://expense-tracker-backend-e5dw.onrender.com/expenses',{
-        headers: {
-    Authorization: `Bearer ${localStorage.getItem('token')}`
-  }
-      }, formData)
-      .then((res) => {
-    setExpenses(prev => [...prev, res.data]); // 👈 Add new expense to state
-    alert("Expense added!");
-  });
+      const res = await axios.post(
+        'https://expense-tracker-backend-e5dw.onrender.com/expenses',
+        formData,
+        config
+      );
+      setExpenses(prev => [...prev, res.data]);
+      alert("Expense added!");
     }
 
+    // Reset form
     setFormData({
       user_id: '',
       amount: '',
@@ -53,7 +59,12 @@ function ExpenseForm({ editExpense, setEditExpense, setExpenses }) {
       description: '',
       date: ''
     });
-  };
+
+  } catch (err) {
+    console.error(err);
+    alert("Error: " + err.response?.data?.message || "Something went wrong");
+  }
+};
 
   return (
     <form onSubmit={handleSubmit}>
