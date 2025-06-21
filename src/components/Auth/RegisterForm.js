@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 
 function RegisterForm() {
   const [formData, setFormData] = useState({ email: '', password: '' });
+  const navigate = useNavigate();
 
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
@@ -11,6 +14,7 @@ function RegisterForm() {
     try {
       await axios.post('https://expense-tracker-backend-e5dw.onrender.com/register', formData);
       alert("Registration successful!");
+      navigate('/');
     } catch (err) {
       alert("Registration failed");
       console.error(err);

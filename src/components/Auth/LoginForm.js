@@ -17,9 +17,12 @@ function LoginForm({ setToken }) {
       navigate('/dashboard');             // ✅ Redirect after login
       alert("Login successful!");
     } catch (err) {
-      alert("Login failed");
-      console.error(err);
-    }
+  if (err.response && err.response.data?.message) {
+    alert(err.response.data.message); // 👈 show exact message from backend
+  } else {
+    alert("Login failed");
+  }
+}
   };
 
   return (
